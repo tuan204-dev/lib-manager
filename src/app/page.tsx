@@ -1,101 +1,140 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { IoBookOutline } from 'react-icons/io5'
+import { RiUserLocationLine } from 'react-icons/ri'
+import { Line } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { Select } from 'antd'
+import CheckInModal from '@/components/CheckInModal'
+import React from 'react'
+import CheckOutModal from '@/components/CheckOutModal'
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+const data = [
+  { date: '1/1/2024', quantity: 10 },
+  { date: '2/1/2024', quantity: 11 },
+  { date: '3/1/2024', quantity: 8 },
+  { date: '4/1/2024', quantity: 15 },
+  { date: '5/1/2024', quantity: 6 },
+  { date: '6/1/2024', quantity: 23 },
+  { date: '7/1/2024', quantity: 53 },
+  { date: '8/1/2024', quantity: 13 },
+  { date: '9/1/2024', quantity: 5 },
+]
+
+const chartData = {
+  labels: data.map((item) => item.date),
+  datasets: [
+    {
+      label: 'Số người ra vào',
+      data: data.map((item) => item.quantity),
+      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      fill: true,
+      tension: 0.4,
+    },
+  ],
 }
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+}
+
+const Home = () => {
+  return (
+    <>
+      <CheckInModal isOpen onClose={() => {}}/>
+      <CheckOutModal isOpen onClose={() => {}}/>
+      <div className="flex-1 flex flex-col p-8">
+        <div className="grid grid-cols-4 gap-x-8">
+          <div className="rounded-2xl bg-[#FFE2E5] w-[200px] h-[200px] mx-auto flex flex-col justify-between p-5">
+            <div className="h-10 w-10 rounded-full bg-[#FA5A7D] flex items-center justify-center">
+              <RiUserLocationLine className="text-white text-[22px]" />
+            </div>
+  
+            <span className="text-[#151D48] text-3xl font-bold">19</span>
+            <span className="text-[#425166]">Người đang trong thư viện</span>
+          </div>
+  
+          <div className="rounded-2xl bg-[#FFF4DE] w-[200px] h-[200px] mx-auto flex flex-col justify-between p-5">
+            <div className="h-10 w-10 rounded-full bg-[#FF947A] flex items-center justify-center">
+              <IoBookOutline className="text-white text-[22px]" />
+            </div>
+  
+            <span className="text-[#151D48] text-3xl font-bold">80</span>
+            <span className="text-[#425166]">Quyển sách đang được mượn</span>
+          </div>
+  
+          <div className="rounded-2xl bg-[#FFF4DE] w-[200px] h-[200px] mx-auto flex flex-col justify-between p-5">
+            <div className="h-10 w-10 rounded-full bg-[#FF947A] flex items-center justify-center">
+              <IoBookOutline className="text-white text-[22px]" />
+            </div>
+  
+            <span className="text-[#151D48] text-3xl font-bold">80</span>
+            <span className="text-[#425166]">Quyển sách đang được mượn</span>
+          </div>
+  
+          <div className="rounded-2xl bg-[#FFF4DE] w-[200px] h-[200px] mx-auto flex flex-col justify-between p-5">
+            <div className="h-10 w-10 rounded-full bg-[#FF947A] flex items-center justify-center">
+              <IoBookOutline className="text-white text-[22px]" />
+            </div>
+  
+            <span className="text-[#151D48] text-3xl font-bold">80</span>
+            <span className="text-[#425166]">Quyển sách đang được mượn</span>
+          </div>
+        </div>
+  
+        <div className="flex flex-col gap-y-10 mt-10 flex-1">
+          <div className="flex justify-between">
+            <h2 className="text-[#151D48] text-2xl font-bold">
+              Thống kê số người ra vào thư viện
+            </h2>
+  
+            <Select
+              defaultValue="10"
+              style={{ width: 120 }}
+              options={[
+                { value: '10', label: '10 Ngày' },
+                { value: '15', label: '15 Ngày' },
+                { value: '30', label: '1 Tháng' },
+                { value: '60', label: '2 Tháng' },
+                { value: '90', label: '3 Tháng' },
+              ]}
+            />
+          </div>
+  
+          <div className="flex-1 relative">
+            <div className="absolute top-0 left-0 right-0 bottom-0">
+              <Line data={chartData} options={options} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default Home
