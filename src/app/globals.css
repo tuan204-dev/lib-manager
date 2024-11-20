@@ -6,3 +6,10 @@
   @apply !border-red-600 shadow-red-600;
   box-shadow: 0 0 0 2px rgb(220 38 38 / 10%) !important;
 }
+
+.select-error {
+  .ant-select-selector {
+    @apply !border-red-600 shadow-red-600;
+    box-shadow: 0 0 0 2px rgb(220 38 38 / 10%) !important;
+  }
+}
