@@ -31,7 +31,8 @@ interface FormValues {
   title: string;
   author: string;
   category: string;
-  publishDate: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  publishDate: any;
   quantity: number;
 }
 
