@@ -1,9 +1,9 @@
 "use client";
 
-import useLibList from "@/hooks/useLibList";
-import LibService from "@/services/LibService";
-import { ILib } from "@/types/lib";
-import { Student } from "@/types/student";
+import useTransList from "@/hooks/useTransList";
+import TransService from "@/services/TransService";
+import { ITrans } from "@/types/trans";
+import dayRemaining from "@/utils/dayRemaining";
 import { Button, Table, TableProps } from "antd";
 import Search from "antd/es/input/Search";
 import useModal from "antd/es/modal/useModal";
@@ -11,12 +11,13 @@ import dayjs from "dayjs";
 import { Fragment } from "react";
 import toast from "react-hot-toast";
 
-const LibLog = () => {
+const Borrow = () => {
   const [modal, contextHolder] = useModal();
 
-  const { libData, isLoading, isValidating, setParams, mutate } = useLibList();
+  const { transData, mutate, isLoading, isValidating, setParams } =
+    useTransList();
 
-  const handleTableChange: TableProps<ILib>["onChange"] = (
+  const handleTableChange: TableProps<ITrans>["onChange"] = (
     pagination,
     filters,
     sorter,
@@ -42,71 +43,78 @@ const LibLog = () => {
   const handleSearch = (value: string) => {
     setParams((prev) => ({
       ...prev,
-      name: value,
       student_id: value,
     }));
   };
 
-  const confirmCheckOut = (student: Student) =>
+  const confirmDel = ({ book, student }: ITrans) =>
     modal.confirm({
-      title: <span>Check out</span>,
-      content: "Bạn có chắc chắn muốn check out sinh viên này?",
-      okText: "Check out",
+      title: <span>Trả sách</span>,
+      content: "Bạn có chắc chắn muốn trả sách này?",
+      okText: "Trả sách",
       cancelText: "Huỷ",
       onOk: async () => {
         try {
-          await LibService.checkOut(student.student_id);
-          toast.success("Check out thành công");
+          await TransService.returnBook({
+            student_id: student?.student_id,
+            book_id: book?.id,
+          });
+          toast.success("Trả sách thành công");
           mutate();
         } catch (e) {
           console.log(e);
-          toast.error("Check out thất bại");
+          toast.error("Trả sách thất bại");
         }
       },
     });
 
-  const columns: TableProps<ILib>["columns"] = [
+  const columns: TableProps<ITrans>["columns"] = [
     {
       title: "Tên",
-      key: "student_name",
-      render: (record) => <span>{record.student.name}</span>,
+      key: "name",
+      render: (record: ITrans) => <span>{record.student.name}</span>,
       sorter: true,
     },
     {
       title: "Mã sinh viên",
       key: "student_id",
-      render: (record) => <span>{record.student.student_id}</span>,
+      render: (record: ITrans) => <span>{record?.student?.student_id}</span>,
       sorter: true,
     },
     {
-      title: "Lớp",
-      key: "student_class",
-      render: (record) => <span>{record.student.student_class}</span>,
+      title: "Sách",
+      key: "title",
+      render: (record: ITrans) => <span>{record.book.title}</span>,
       sorter: true,
     },
     {
-      title: "Ngày sinh",
-      key: "birthday",
-      render: (record) => (
-        <span>
-          {dayjs(record.student.birthday * 1000).format("DD/MM/YYYY")}
-        </span>
+      title: "Ngày mượn",
+      dataIndex: "borrow_date",
+      key: "borrow_date",
+      render: (date) => <span>{dayjs(date * 1000).format("DD-MM-YYYY")}</span>,
+      sorter: true,
+    },
+    {
+      title: "Số ngày đăng ký",
+      dataIndex: "days_registered",
+      key: "days_registered",
+      render: (days) => <span>{`${days} ngày`}</span>,
+      sorter: true,
+    },
+    {
+      title: "Số ngày còn lại",
+      key: "day_remaining",
+      render: ({ borrow_date, days_registered }: ITrans) => (
+        <span>{`${dayRemaining(borrow_date, days_registered)} ngày`}</span>
       ),
-      sorter: true,
-    },
-    {
-      title: "Thời gian vào",
-      dataIndex: "checked_in",
-      key: "checked_in",
-      render: (date) => <span>{dayjs(date * 1000).format("HH:mm")}</span>,
-      sorter: true,
     },
     {
       title: "Thao tác",
       key: "action",
-      render: (record) => (
-        <div onClick={() => confirmCheckOut(record.student)}>
-          <Button>Check out</Button>
+      render: (record: ITrans) => (
+        <div className="flex gap-x-4">
+          <Button onClick={() => confirmDel(record)}>Trả sách</Button>
+          {/* <Button onClick={() => editBook(record)}>Chỉnh sửa</Button> */}
         </div>
       ),
     },
@@ -118,19 +126,19 @@ const LibLog = () => {
         <div className="mb-6 flex justify-between items-center gap-x-5 px-5">
           <Search
             onSearch={handleSearch}
-            placeholder="Tìm kiếm sinh viên"
+            placeholder="Nhập mã sinh viên"
             size="large"
             allowClear
             className="min-w-[400px]"
           />
         </div>
 
-        <Table<ILib>
+        <Table<ITrans>
           columns={columns}
-          dataSource={libData?.results ?? []}
+          dataSource={transData?.results ?? []}
           pagination={{
             position: ["bottomCenter"],
-            total: libData?.total_elements ?? 0,
+            total: transData?.total_elements ?? 0,
             showSizeChanger: true,
             pageSizeOptions: [10, 20, 30, 50, 100],
             defaultPageSize: 20,
@@ -150,4 +158,4 @@ const LibLog = () => {
   );
 };
 
-export default LibLog;
+export default Borrow;

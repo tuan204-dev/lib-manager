@@ -52,7 +52,7 @@ const search = async ({
   order_by = "title",
   order = "ASC",
   page = 1,
-  pageSize = 10,
+  pageSize = 20,
 }: BookSearchParams) => {
   const { data } = await axiosInstance.post<APIResponse<Book[]>>(
     `/book/search?page=${page}&page_size=${pageSize}`,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAddBookModal } from "@/components/AddBookModal";
+import { useEditBookModal } from "@/components/EditBookModal";
 import useBookList from "@/hooks/useBookList";
 import useCategory from "@/hooks/useCategory";
 import BookService from "@/services/BookService";
@@ -30,6 +31,7 @@ const initFilter: IFilter = {
 const Books = () => {
   const [modal, contextHolder] = useModal();
   const { open: openAddBook } = useAddBookModal();
+  const { open: editBook } = useEditBookModal();
 
   const [filter, setFilter] = useState<IFilter>(initFilter);
 
@@ -156,8 +158,9 @@ const Books = () => {
       title: "Thao tác",
       key: "action",
       render: (record: Book) => (
-        <div>
+        <div className="flex gap-x-4">
           <Button onClick={() => confirmDel(record.id)}>Xoá</Button>
+          <Button onClick={() => editBook(record)}>Chỉnh sửa</Button>
         </div>
       ),
     },

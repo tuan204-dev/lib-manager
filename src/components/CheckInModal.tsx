@@ -210,6 +210,7 @@ const CheckInModal = () => {
                       })}
                       {...field}
                       maxDate={dayjs(now())}
+                      format="DD-MM-YYYY"
                     />
                   )}
                 />

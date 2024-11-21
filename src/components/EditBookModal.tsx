@@ -2,7 +2,7 @@
 import useBookList from "@/hooks/useBookList";
 import useCategory from "@/hooks/useCategory";
 import BookService from "@/services/BookService";
-import { ModalState } from "@/types/common";
+import { Book } from "@/types/book";
 import cn from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@mui/material";
@@ -10,6 +10,7 @@ import { Button, DatePicker, InputNumber, Select } from "antd";
 import Input from "antd/es/input/Input";
 import dayjs from "dayjs";
 import { floor, now } from "lodash";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
@@ -34,18 +35,27 @@ interface FormValues {
   quantity: number;
 }
 
-export const useAddBookModal = create<ModalState>((set) => ({
+interface EditBookModalState {
+  isOpen: boolean;
+  book: Book | null;
+  open: (book: Book) => void;
+  close: () => void;
+}
+
+export const useEditBookModal = create<EditBookModalState>((set) => ({
   isOpen: false,
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
+  book: null,
+  open: (book) => set({ isOpen: true, book }),
+  close: () => set({ isOpen: false, book: null }),
 }));
 
-const AddBookModal = () => {
+const EditBookModal = () => {
   const {
     handleSubmit,
     formState: { errors },
     control,
     reset,
+    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
@@ -54,7 +64,23 @@ const AddBookModal = () => {
 
   const { categories } = useCategory();
 
-  const { isOpen, close } = useAddBookModal();
+  const { isOpen, close, book } = useEditBookModal();
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+
+      return;
+    }
+
+    if (book) {
+      setValue("title", book.title);
+      setValue("author", book.author);
+      setValue("category", book.category);
+      setValue("publishDate", dayjs.unix(book.publish_date));
+      setValue("quantity", book.quantity);
+    }
+  }, [book, isOpen]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -68,12 +94,12 @@ const AddBookModal = () => {
 
       close();
 
-      toast.success("Thêm sách thành công");
+      toast.success("Sửa sách thành công");
       refreshBookList();
       reset();
     } catch (e) {
       console.log(e);
-      toast.error("Thêm sách thất bại");
+      toast.error("Sửa sách thất bại");
     }
   };
 
@@ -227,4 +253,4 @@ const AddBookModal = () => {
   );
 };
 
-export default AddBookModal;
+export default EditBookModal;
