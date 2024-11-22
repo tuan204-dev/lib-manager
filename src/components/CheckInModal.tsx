@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
+import { CHECK_IN_ERRORS } from "@/constants/errors";
 import LibService from "@/services/LibService";
 import StudentService from "@/services/StudentService";
 import { ModalState } from "@/types/common";
@@ -98,8 +100,14 @@ const CheckInModal = () => {
         handleClose();
       }
     } catch (e) {
-      console.log(e);
-      toast.error("Check in thất bại");
+      //@ts-ignore
+      const errorMsg = e?.response?.data?.message ?? "";
+
+      switch (errorMsg) {
+        case CHECK_IN_ERRORS.CHECKED_IN: {
+          toast.error("Sinh viên đang trong thư viện");
+        }
+      }
       handleClose();
     }
   };

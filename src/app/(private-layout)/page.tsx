@@ -1,5 +1,6 @@
 "use client";
 
+import { useBorrowBookModal } from "@/components/BorrowBookModal";
 import { useCheckIn } from "@/components/CheckInModal";
 import { useCheckOut } from "@/components/CheckOutModal";
 import useLibList from "@/hooks/useLibList";
@@ -46,6 +47,7 @@ const options = {
 const Home = () => {
   const { open: openCheckIn } = useCheckIn();
   const { open: openCheckOut } = useCheckOut();
+  const { open: borrowBook } = useBorrowBookModal();
 
   const { libData } = useLibList();
   const { transData } = useTransList();
@@ -80,7 +82,7 @@ const Home = () => {
           </div>
 
           <span className="text-[#151D48] text-3xl font-bold">
-            {libData?.total_elements}
+            {libData?.total_elements ?? 0}
           </span>
           <span className="text-[#425166]">Người đang trong thư viện</span>
         </Link>
@@ -94,7 +96,7 @@ const Home = () => {
           </div>
 
           <span className="text-[#151D48] text-3xl font-bold">
-            {transData?.total_elements}
+            {transData?.total_elements ?? 0}
           </span>
           <span className="text-[#425166]">Quyển sách đang được mượn</span>
         </Link>
@@ -117,7 +119,10 @@ const Home = () => {
           </span>
         </button>
 
-        <button className="rounded-2xl w-[180px] h-[180px] bg-[#b0dcea] flex flex-col items-center justify-center gap-y-5 mx-auto">
+        <button
+          onClick={borrowBook}
+          className="rounded-2xl w-[180px] h-[180px] bg-[#b0dcea] flex flex-col items-center justify-center gap-y-5 mx-auto"
+        >
           <LiaHandHoldingSolid className="text-3xl" />
           <span className="text-[#151D48] text-[26px] font-bold">
             Mượn sách

@@ -1,5 +1,6 @@
-import { Student } from "@/types/student";
+import { Student, StudentSearchParams } from "@/types/student";
 import axiosInstance from "./axios";
+import { APIResponse } from "@/types/common";
 
 const getInfo = async (studentId: string) => {
   try {
@@ -20,6 +21,17 @@ const add = async (params: Omit<Student, "id">) => {
   return data;
 };
 
-const StudentService = { getInfo, add };
+const search = async (params: StudentSearchParams) => {
+  const { page = 1, pageSize = 20, ...rest } = params;
+
+  const { data } = await axiosInstance.post<APIResponse<Student[]>>(
+    `/student/search?page=${page}&pageSize=${pageSize}`,
+    rest,
+  );
+
+  return data;
+};
+
+const StudentService = { getInfo, add, search };
 
 export default StudentService;

@@ -1,4 +1,5 @@
 import AddBookModal from "@/components/AddBookModal";
+import BorrowBookModal from "@/components/BorrowBookModal";
 import CheckInModal from "@/components/CheckInModal";
 import CheckOutModal from "@/components/CheckOutModal";
 import EditBookModal from "@/components/EditBookModal";
@@ -20,6 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <EditBookModal />
       <CheckInModal />
       <CheckOutModal />
+      <BorrowBookModal />
     </>
   );
 };

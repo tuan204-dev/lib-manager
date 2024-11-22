@@ -4,7 +4,7 @@ import { APIResponse } from "@/types/common";
 
 const borrow = async (params: {
   student_id: string;
-  book_id: number;
+  book_id: string;
   days_registered: number;
 }) => {
   await axiosInstance.post(`/trans/add`, params);

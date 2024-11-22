@@ -85,7 +85,8 @@ const EditBookModal = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await BookService.add({
+      await BookService.edit({
+        id: book?.id ?? "",
         title: data.title,
         author: data.author,
         category: data.category,
@@ -246,7 +247,7 @@ const EditBookModal = () => {
           </div>
 
           <Button htmlType="submit" type="primary" className="col-span-full">
-            Thêm
+            Lưu
           </Button>
         </form>
       </div>
