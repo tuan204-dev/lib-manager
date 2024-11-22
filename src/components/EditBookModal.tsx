@@ -115,7 +115,7 @@ const EditBookModal = () => {
         <div className="grid grid-cols-[50px,1fr,50px]">
           <div></div>
           <span className="text-center mx-auto text-[28px] font-bold">
-            Thêm sách
+            Chỉnh sửa sách
           </span>
           <button
             onClick={close}
