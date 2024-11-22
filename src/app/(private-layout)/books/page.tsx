@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 import { useAddBookModal } from "@/components/AddBookModal";
 import { useEditBookModal } from "@/components/EditBookModal";
+import { BOOK_ERRORS } from "@/constants/errors";
 import useBookList from "@/hooks/useBookList";
 import useCategory from "@/hooks/useCategory";
 import BookService from "@/services/BookService";
@@ -38,7 +40,6 @@ const Books = () => {
   const {
     bookData,
     isLoading,
-    isValidating,
     mutate: refreshBookList,
     setParams,
     params,
@@ -105,8 +106,14 @@ const Books = () => {
           toast.success("Xoá sách thành công");
           refreshBookList();
         } catch (e) {
-          console.log(e);
-          toast.error("Xoá sách thất bại");
+          //@ts-ignore
+          const errorMsg = e?.response?.data?.message ?? "";
+
+          switch (errorMsg) {
+            case BOOK_ERRORS.BORROWED: {
+              toast.error("Sách đã được mượn, không thể xoá");
+            }
+          }
         }
       },
     });
@@ -286,7 +293,7 @@ const Books = () => {
             x: 1000,
           }}
           sticky
-          loading={isLoading || isValidating}
+          loading={isLoading}
           onChange={handleTableChange}
         />
       </div>

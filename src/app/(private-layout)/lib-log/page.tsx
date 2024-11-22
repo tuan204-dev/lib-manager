@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 const LibLog = () => {
   const [modal, contextHolder] = useModal();
 
-  const { libData, isLoading, isValidating, setParams, mutate } = useLibList();
+  const { libData, isLoading, setParams, mutate } = useLibList();
 
   const handleTableChange: TableProps<ILib>["onChange"] = (
     pagination,
@@ -140,7 +140,7 @@ const LibLog = () => {
             x: 1000,
           }}
           sticky
-          loading={isLoading || isValidating}
+          loading={isLoading}
           onChange={handleTableChange}
         />
       </div>

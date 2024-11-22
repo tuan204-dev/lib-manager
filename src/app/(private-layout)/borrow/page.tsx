@@ -14,8 +14,7 @@ import toast from "react-hot-toast";
 const Borrow = () => {
   const [modal, contextHolder] = useModal();
 
-  const { transData, mutate, isLoading, isValidating, setParams } =
-    useTransList();
+  const { transData, mutate, isLoading, setParams } = useTransList();
 
   const handleTableChange: TableProps<ITrans>["onChange"] = (
     pagination,
@@ -148,7 +147,7 @@ const Borrow = () => {
             x: 1000,
           }}
           sticky
-          loading={isLoading || isValidating}
+          loading={isLoading}
           onChange={handleTableChange}
         />
       </div>

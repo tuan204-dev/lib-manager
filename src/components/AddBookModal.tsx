@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
+import { BOOK_ERRORS } from "@/constants/errors";
 import useBookList from "@/hooks/useBookList";
 import useCategory from "@/hooks/useCategory";
 import BookService from "@/services/BookService";
@@ -72,8 +74,20 @@ const AddBookModal = () => {
       refreshBookList();
       reset();
     } catch (e) {
-      console.log(e);
-      toast.error("Thêm sách thất bại");
+      // @ts-ignore
+      const errorMsg = Object.values(e?.response?.data?.errors ?? {})[0]?.[0];
+
+      switch (errorMsg) {
+        case BOOK_ERRORS.EXISTED: {
+          toast.error("Tên sách đã tồn tại");
+          break;
+        }
+
+        default: {
+          toast.error("Thêm sách thất bại");
+          break;
+        }
+      }
     }
   };
 

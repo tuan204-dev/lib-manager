@@ -6,7 +6,11 @@ const dayRemaining = (borrowDate: number, daysRegistered: number) => {
 
   return Math.floor(
     (returnDateObj.getTime() - currentDate) / (24 * 60 * 60 * 1000),
-  );
+  ) > 0
+    ? Math.floor(
+        (returnDateObj.getTime() - currentDate) / (24 * 60 * 60 * 1000),
+      )
+    : 0;
 };
 
 export default dayRemaining;
