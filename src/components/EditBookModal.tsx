@@ -81,7 +81,7 @@ const EditBookModal = () => {
       setValue("publishDate", dayjs.unix(book.publish_date));
       setValue("quantity", book.quantity);
     }
-  }, [book, isOpen]);
+  }, [book, isOpen, reset, setValue]);
 
   const onSubmit = async (data: FormValues) => {
     try {

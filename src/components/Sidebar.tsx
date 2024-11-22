@@ -25,14 +25,19 @@ const NAV_LINKS = [
   },
   {
     path: "/lib-log",
-    label: "Quản vào thư viện",
+    label: "Quản lý vào thư viện",
     icon: <GrLogin className="text-[26px]" />,
   },
   {
     path: "/borrow",
-    label: "Quản lý mượn sách",
+    label: "Quản lý mượn trả sách",
     icon: <LiaHandHoldingSolid className="text-[32px]" />,
   },
+  // {
+  //   path: "/settings",
+  //   label: "Cài đặt",
+  //   icon: <LuSettings className="text-[30px]" />,
+  // },
 ];
 
 const Sidebar = () => {
