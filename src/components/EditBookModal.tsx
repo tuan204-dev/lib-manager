@@ -13,6 +13,7 @@ import { floor, now } from "lodash";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { create } from "zustand";
@@ -130,8 +131,9 @@ const EditBookModal = () => {
           className="grid grid-cols-2 gap-x-4 gap-y-4 mt-5"
         >
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="title" className="text-black/85">
-              Tên sách
+            <label htmlFor="title" className="text-black/85 flex items-center">
+              Tên sách{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -151,8 +153,8 @@ const EditBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="author" className="text-black/85">
-              Tác giả
+            <label htmlFor="author" className="text-black/85 flex items-center">
+              Tác giả <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -172,8 +174,12 @@ const EditBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="category" className="text-black/85">
-              Thể loại
+            <label
+              htmlFor="category"
+              className="text-black/85 flex items-center"
+            >
+              Thể loại{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -201,8 +207,12 @@ const EditBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="publish-date" className="text-black/85">
-              Thời gian xuất bản
+            <label
+              htmlFor="publish-date"
+              className="text-black/85 flex items-center"
+            >
+              Thời gian xuất bản{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -224,8 +234,12 @@ const EditBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1 col-span-full">
-            <label htmlFor="quantity" className="text-black/85">
-              Số lượng
+            <label
+              htmlFor="quantity"
+              className="text-black/85 flex items-center"
+            >
+              Số lượng{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller

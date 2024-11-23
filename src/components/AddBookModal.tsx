@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { floor, now } from "lodash";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { create } from "zustand";
@@ -58,6 +59,11 @@ const AddBookModal = () => {
 
   const { isOpen, close } = useAddBookModal();
 
+  const handleClose = () => {
+    close();
+    reset();
+  };
+
   const onSubmit = async (data: FormValues) => {
     try {
       await BookService.add({
@@ -68,11 +74,10 @@ const AddBookModal = () => {
         publish_date: floor(new Date(data.publishDate).getTime() / 1000),
       });
 
-      close();
+      handleClose();
 
       toast.success("Thêm sách thành công");
       refreshBookList();
-      reset();
     } catch (e) {
       // @ts-ignore
       const errorMsg = Object.values(e?.response?.data?.errors ?? {})[0]?.[0];
@@ -94,7 +99,7 @@ const AddBookModal = () => {
   return (
     <Modal
       open={isOpen}
-      onClose={close}
+      onClose={handleClose}
       className="flex items-center justify-center !z-10"
     >
       <div className="bg-white px-5 py-4 rounded-md flex flex-col w-screen max-w-[550px] outline-none">
@@ -104,7 +109,7 @@ const AddBookModal = () => {
             Thêm sách
           </span>
           <button
-            onClick={close}
+            onClick={handleClose}
             className="flex justify-end text-[#464646] items-center"
           >
             <IoMdClose className="text-3xl" />
@@ -116,8 +121,9 @@ const AddBookModal = () => {
           className="grid grid-cols-2 gap-x-4 gap-y-4 mt-5"
         >
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="title" className="text-black/85">
-              Tên sách
+            <label htmlFor="title" className="text-black/85 flex items-center">
+              Tên sách{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -137,8 +143,8 @@ const AddBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="author" className="text-black/85">
-              Tác giả
+            <label htmlFor="author" className="text-black/85 flex items-center">
+              Tác giả <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -158,8 +164,12 @@ const AddBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="category" className="text-black/85">
-              Thể loại
+            <label
+              htmlFor="category"
+              className="text-black/85 flex items-center"
+            >
+              Thể loại{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -187,8 +197,12 @@ const AddBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="publish-date" className="text-black/85">
-              Thời gian xuất bản
+            <label
+              htmlFor="publish-date"
+              className="text-black/85 flex items-center"
+            >
+              Thời gian xuất bản{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -210,8 +224,12 @@ const AddBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1 col-span-full">
-            <label htmlFor="quantity" className="text-black/85">
-              Số lượng
+            <label
+              htmlFor="quantity"
+              className="text-black/85 flex items-center"
+            >
+              Số lượng{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller

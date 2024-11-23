@@ -3,6 +3,7 @@
 import { useBorrowBookModal } from "@/components/BorrowBookModal";
 import { useCheckIn } from "@/components/CheckInModal";
 import { useCheckOut } from "@/components/CheckOutModal";
+import useExpiredCount from "@/hooks/useExpiredCount";
 import useLibList from "@/hooks/useLibList";
 import useLibStats from "@/hooks/useLibStats";
 import useTransList from "@/hooks/useTransList";
@@ -21,6 +22,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { Line } from "react-chartjs-2";
 import { BiLogOut, BiMapPin } from "react-icons/bi";
+import { FaClockRotateLeft } from "react-icons/fa6";
 import { IoBookOutline } from "react-icons/io5";
 import { LiaHandHoldingSolid } from "react-icons/lia";
 import { RiUserLocationLine } from "react-icons/ri";
@@ -51,6 +53,7 @@ const Home = () => {
 
   const { libData } = useLibList();
   const { transData } = useTransList();
+  const { expiredCount } = useExpiredCount();
 
   const { statsData, dayNumber, setDayNumber, isLoading } = useLibStats();
 
@@ -101,11 +104,21 @@ const Home = () => {
           <span className="text-[#425166]">Quyển sách đang được mượn</span>
         </Link>
 
+        <div className="rounded-2xl bg-[#FFF4DE] w-[180px] h-[180px] mx-auto flex flex-col justify-between p-5">
+          <FaClockRotateLeft className="text-3xl text-[#E74C3C]" />
+
+          <span className="text-[#151D48] text-3xl font-bold">
+            {expiredCount}
+          </span>
+
+          <span className="text-[#425166]">Lượt mượn hết hạn chưa trả</span>
+        </div>
+
         <button
           onClick={openCheckIn}
           className="rounded-2xl w-[180px] h-[180px] bg-[#DCFCE7] flex flex-col items-center justify-center gap-y-5 mx-auto"
         >
-          <BiMapPin className="text-3xl" />
+          <BiMapPin className="text-3xl text-[#27AE60]" />
           <span className="text-[#151D48] text-[26px] font-bold">Check In</span>
         </button>
 
@@ -113,7 +126,7 @@ const Home = () => {
           onClick={openCheckOut}
           className="rounded-2xl w-[180px] h-[180px] bg-[#F3E8FF] flex flex-col items-center justify-center gap-y-5 mx-auto"
         >
-          <BiLogOut className="text-3xl" />
+          <BiLogOut className="text-3xl text-[#8E44AD]" />
           <span className="text-[#151D48] text-[26px] font-bold">
             Check Out
           </span>
@@ -123,7 +136,7 @@ const Home = () => {
           onClick={borrowBook}
           className="rounded-2xl w-[180px] h-[180px] bg-[#b0dcea] flex flex-col items-center justify-center gap-y-5 mx-auto"
         >
-          <LiaHandHoldingSolid className="text-3xl" />
+          <LiaHandHoldingSolid className="text-3xl text-[#2E86C1]" />
           <span className="text-[#151D48] text-[26px] font-bold">
             Mượn sách
           </span>

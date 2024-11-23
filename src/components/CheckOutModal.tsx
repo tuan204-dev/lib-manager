@@ -6,6 +6,7 @@ import { Modal } from "@mui/material";
 import { Button, Input } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { create } from "zustand";
@@ -78,7 +79,13 @@ const CheckOutModal = () => {
           className="mt-5 flex flex-col gap-y-3"
         >
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="student-id">Mã sinh viên</label>
+            <label
+              htmlFor="student-id"
+              className="text-black/85 flex items-center"
+            >
+              Mã sinh viên{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
+            </label>
 
             <Controller
               name="studentId"

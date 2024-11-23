@@ -120,3 +120,5 @@ export const CATEGORIES = [
     label: "Sách trẻ em",
   },
 ];
+
+export const DEFAULT_BORROW_DURATION = 7;

@@ -13,6 +13,7 @@ import { floor, now } from "lodash";
 import { Fragment, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { create } from "zustand";
@@ -137,8 +138,12 @@ const CheckInModal = () => {
           className="mt-5 flex flex-col gap-y-3"
         >
           <div className="flex flex-col gap-y-1">
-            <label className="text-black/85" htmlFor="student-id">
-              Mã sinh viên
+            <label
+              className="text-black/85 flex items-center"
+              htmlFor="student-id"
+            >
+              Mã sinh viên{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -152,6 +157,7 @@ const CheckInModal = () => {
                   className={cn({
                     "border-error": errors.studentId,
                   })}
+                  disabled={step === 2}
                 />
               )}
             />
@@ -160,8 +166,11 @@ const CheckInModal = () => {
           {step === 2 && (
             <Fragment>
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-name">
-                  Tên
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-name"
+                >
+                  Tên <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller
@@ -181,8 +190,11 @@ const CheckInModal = () => {
               </div>
 
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-class">
-                  Lớp
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-class"
+                >
+                  Lớp <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller
@@ -202,8 +214,12 @@ const CheckInModal = () => {
               </div>
 
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-birthday">
-                  Ngày sinh
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-birthday"
+                >
+                  Ngày sinh{" "}
+                  <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller

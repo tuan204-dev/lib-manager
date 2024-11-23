@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
+import { DEFAULT_BORROW_DURATION } from "@/constants/book";
 import { BORROW_ERRORS } from "@/constants/errors";
 import useBookListSearch from "@/hooks/useBookListSearch";
 import StudentService from "@/services/StudentService";
@@ -22,6 +23,7 @@ import { debounce, floor, now } from "lodash";
 import { Fragment, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { create } from "zustand";
@@ -76,6 +78,9 @@ const BorrowBookModal = () => {
     handleSubmit,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      dayRegistered: DEFAULT_BORROW_DURATION,
+    },
   });
 
   const bookIdRef = useRef<any>();
@@ -95,6 +100,7 @@ const BorrowBookModal = () => {
   }, 300);
 
   const handleClose = () => {
+    setParams((prev) => ({ ...prev, title: "" }));
     close();
     setStep(1);
     reset();
@@ -160,7 +166,7 @@ const BorrowBookModal = () => {
 
   return (
     <Modal
-      onClose={close}
+      onClose={handleClose}
       open={isOpen}
       className="flex items-center justify-center !z-10"
     >
@@ -171,7 +177,7 @@ const BorrowBookModal = () => {
             Mượn sách
           </span>
           <button
-            onClick={close}
+            onClick={handleClose}
             className="flex justify-end text-[#464646] items-center"
           >
             <IoMdClose className="text-3xl" />
@@ -183,8 +189,12 @@ const BorrowBookModal = () => {
           className="mt-5 flex flex-col gap-y-3"
         >
           <div className="flex flex-col gap-y-1">
-            <label className="text-black/85" htmlFor="student-id">
-              Mã sinh viên
+            <label
+              className="text-black/85 flex items-center"
+              htmlFor="student-id"
+            >
+              Mã sinh viên{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
@@ -198,6 +208,7 @@ const BorrowBookModal = () => {
                   className={cn({
                     "border-error": errors.studentId,
                   })}
+                  disabled={step === 2}
                 />
               )}
             />
@@ -206,8 +217,11 @@ const BorrowBookModal = () => {
           {step === 2 && (
             <Fragment>
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-name">
-                  Tên
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-name"
+                >
+                  Tên <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller
@@ -227,8 +241,11 @@ const BorrowBookModal = () => {
               </div>
 
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-class">
-                  Lớp
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-class"
+                >
+                  Lớp <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller
@@ -248,8 +265,12 @@ const BorrowBookModal = () => {
               </div>
 
               <div className="flex flex-col gap-y-1">
-                <label className="text-black/85" htmlFor="student-birthday">
-                  Ngày sinh
+                <label
+                  className="text-black/85 flex items-center"
+                  htmlFor="student-birthday"
+                >
+                  Ngày sinh{" "}
+                  <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
                 </label>
 
                 <Controller
@@ -273,8 +294,12 @@ const BorrowBookModal = () => {
           )}
 
           <div className="flex flex-col gap-y-1">
-            <label htmlFor="category" className="text-black/85">
-              Tên sách
+            <label
+              htmlFor="category"
+              className="text-black/85 flex items-center"
+            >
+              Tên sách{" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <AutoComplete
@@ -291,8 +316,12 @@ const BorrowBookModal = () => {
           </div>
 
           <div className="flex flex-col gap-y-1 col-span-full">
-            <label htmlFor="quantity" className="text-black/85">
-              Thời gian mượn (ngày)
+            <label
+              htmlFor="quantity"
+              className="text-black/85 flex items-center"
+            >
+              Thời gian mượn (ngày){" "}
+              <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
             <Controller
