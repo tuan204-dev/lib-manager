@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 import { CHECK_IN_ERRORS } from "@/constants/errors";
+import useLibList from "@/hooks/useLibList";
+import useLibListSearch from "@/hooks/useLibListSearch";
 import LibService from "@/services/LibService";
 import StudentService from "@/services/StudentService";
 import { ModalState } from "@/types/common";
@@ -51,6 +53,9 @@ const CheckInModal = () => {
     });
   }, [step]);
 
+  const { mutate: refreshData } = useLibList();
+  const {mutate: refreshSearchData } = useLibListSearch();
+
   const {
     handleSubmit,
     formState: { errors },
@@ -87,6 +92,8 @@ const CheckInModal = () => {
           await LibService.checkIn(studentId);
           toast.success("Check in thành công");
           handleClose();
+          refreshData();
+          refreshSearchData()
         }
       } else {
         await StudentService.add({
@@ -98,7 +105,9 @@ const CheckInModal = () => {
 
         await LibService.checkIn(studentId);
         toast.success("Check in thành công");
+        refreshData();
         handleClose();
+        refreshSearchData()
       }
     } catch (e) {
       //@ts-ignore
@@ -234,6 +243,8 @@ const CheckInModal = () => {
                       })}
                       {...field}
                       maxDate={dayjs(now())}
+                      // defaultValue={dayjs(now())}
+                      defaultPickerValue={dayjs().subtract(19, 'year')}
                       format="DD-MM-YYYY"
                     />
                   )}

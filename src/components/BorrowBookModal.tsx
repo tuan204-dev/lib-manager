@@ -4,6 +4,7 @@
 import { DEFAULT_BORROW_DURATION } from "@/constants/book";
 import { BORROW_ERRORS } from "@/constants/errors";
 import useBookListSearch from "@/hooks/useBookListSearch";
+import useTransList from "@/hooks/useTransList";
 import StudentService from "@/services/StudentService";
 import TransService from "@/services/TransService";
 import { ModalState } from "@/types/common";
@@ -70,6 +71,8 @@ const BorrowBookModal = () => {
     });
   }, [step]);
 
+  const { mutate: refreshData } = useTransList();
+
   const {
     control,
     formState: { errors },
@@ -134,6 +137,7 @@ const BorrowBookModal = () => {
           });
           toast.success("Mượn sách thành công");
           handleClose();
+          refreshData();
         }
       } else {
         await StudentService.add({
@@ -150,6 +154,7 @@ const BorrowBookModal = () => {
         });
         toast.success("Mượn sách thành công");
         handleClose();
+        refreshData();
       }
     } catch (e) {
       //@ts-ignore

@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import useLibList from "@/hooks/useLibList";
+import useLibListSearch from "@/hooks/useLibListSearch";
 import LibService from "@/services/LibService";
 import { ModalState } from "@/types/common";
+import cn from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@mui/material";
-import { Button, Input } from "antd";
-import { Controller, useForm } from "react-hook-form";
+import { AutoComplete, AutoCompleteProps, Button } from "antd";
+import { debounce } from "lodash";
+import { useMemo, useRef } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaStarOfLife } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
@@ -26,18 +32,37 @@ const schema = z.object({
 });
 
 const CheckOutModal = () => {
+  const { libData, setParams, mutate: refreshSearchData } = useLibListSearch();
+  const { mutate: refreshData } = useLibList();
   const {
     handleSubmit,
     formState: { errors },
-    control,
     reset,
+    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
+  const bookIdRef = useRef<any>();
+
+  const studentOptions = useMemo<AutoCompleteProps["options"]>(
+    () =>
+      libData?.results?.map((i) => ({
+        value: i.student.student_id,
+        label: i.student.student_id,
+        title: i.student.student_id,
+      })),
+    [libData],
+  );
+
+  const handleSearchStudent = debounce((text) => {
+    setParams((prev) => ({ ...prev, student_id: text }));
+  }, 300);
+
   const { isOpen, close } = useCheckOut();
 
   const handleClose = () => {
+    setParams((prev) => ({ ...prev, student_id: "" }));
     close();
     reset();
   };
@@ -46,6 +71,8 @@ const CheckOutModal = () => {
     try {
       await LibService.checkOut(studentId);
       toast.success("Check out thành công");
+      refreshData();
+      refreshSearchData();
     } catch (e) {
       console.log(e);
       toast.error("Check out thất bại");
@@ -87,7 +114,7 @@ const CheckOutModal = () => {
               <FaStarOfLife className="text-red-500 text-[10px] ml-1" />
             </label>
 
-            <Controller
+            {/* <Controller
               name="studentId"
               control={control}
               render={({ field }) => (
@@ -98,6 +125,17 @@ const CheckOutModal = () => {
                   className={errors.studentId ? "border-error" : ""}
                 />
               )}
+            /> */}
+            <AutoComplete
+              options={studentOptions}
+              onSelect={(_, { title }) => setValue("studentId", title ?? "")}
+              placeholder="Vui lòng nhập tên sách"
+              onChange={handleSearchStudent}
+              ref={bookIdRef}
+              allowClear
+              className={cn("w-full", {
+                "select-error": errors.studentId,
+              })}
             />
           </div>
 
